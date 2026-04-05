@@ -1,171 +1,977 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luxury Upgrade</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Box Cover - Hát cho Linh nghe</title>
+  <style>
+    :root{
+      --bg1:#1a0f17;
+      --bg2:#2a1423;
+      --bg3:#3b1e33;
+      --card:rgba(255,255,255,0.10);
+      --line:rgba(255,255,255,0.16);
+      --text:#fff8fc;
+      --muted:rgba(255,245,250,0.78);
+      --pink:#f9a8d4;
+      --rose:#fb7185;
+      --lavender:#c4b5fd;
+      --shadow:0 18px 40px rgba(0,0,0,0.32);
+      --radius:24px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
+    html{
+      scroll-behavior:smooth;
+    }
 
-body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1);
-}
+    body{
+      font-family:"Segoe UI", Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(249,168,212,0.20), transparent 24%),
+        radial-gradient(circle at 85% 18%, rgba(196,181,253,0.18), transparent 22%),
+        radial-gradient(circle at 50% 85%, rgba(251,113,133,0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg1), var(--bg2) 45%, var(--bg3));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
 
-/* ánh sáng chạy nền */
-body::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
-  animation: moveLight 10s linear infinite;
-}
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      width:340px;
+      height:340px;
+      border-radius:50%;
+      filter:blur(85px);
+      z-index:-1;
+      opacity:.55;
+      animation: floatOrb 9s ease-in-out infinite;
+    }
 
-@keyframes moveLight {
-  0% { transform: translate(-30%, -30%); }
-  50% { transform: translate(30%, 30%); }
-  100% { transform: translate(-30%, -30%); }
-}
+    body::before{
+      background:rgba(249,168,212,0.18);
+      top:-80px;
+      left:-70px;
+    }
 
-/* container */
-.container {
-  text-align: center;
-  padding: 50px;
-  border-radius: 25px;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 0 50px rgba(255,105,180,0.4);
-  z-index: 2;
-}
+    body::after{
+      background:rgba(196,181,253,0.16);
+      right:-90px;
+      bottom:30px;
+      animation-delay:2s;
+    }
 
-/* text glow */
-h1 {
-  font-size: 34px;
-  color: #ff2e63;
-  text-shadow: 0 0 10px rgba(255,46,99,0.6);
-  animation: fadeUp 1.5s ease;
-}
+    @keyframes floatOrb{
+      0%,100%{ transform:translateY(0) translateX(0); }
+      50%{ transform:translateY(20px) translateX(12px); }
+    }
 
-p {
-  margin: 20px 0;
-  color: #fff;
-}
+    .app{
+      width:min(1100px, calc(100% - 28px));
+      margin:0 auto;
+      padding:26px 0 120px;
+    }
 
-/* countdown */
-#countdown {
-  font-size: 22px;
-  margin: 20px 0;
-  color: #ff2e63;
-  font-weight: bold;
-}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding:14px 18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(14px);
+      border-radius:999px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:14px;
+      z-index:30;
+    }
 
-/* button */
-.btn {
-  display: inline-block;
-  padding: 12px 25px;
-  border-radius: 50px;
-  background: #ff2e63;
-  color: #fff;
-  text-decoration: none;
-  margin-top: 10px;
-  transition: 0.3s;
-}
+    .brand{
+      font-weight:800;
+      font-size:18px;
+      letter-spacing:0.3px;
+      color:#ffe4ef;
+    }
 
-.btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #ff2e63;
-}
+    .mini-note{
+      color:var(--muted);
+      font-size:13px;
+    }
 
-/* heart */
-.heart {
-  position: absolute;
-  top: -50px;
-  color: #ff2e63;
-  animation: fall linear infinite;
-}
+    .screen{
+      display:none;
+      animation: fadeIn .45s ease;
+    }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(360deg);
-    opacity: 0;
-  }
-}
+    .screen.active{
+      display:block;
+    }
 
-/* fade */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(40px);}
-  to { opacity: 1; transform: translateY(0);}
-}
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translateY(14px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
 
-</style>
+    .hero{
+      padding:44px 0 22px;
+      text-align:center;
+    }
+
+    .hero h1{
+      font-size:clamp(34px, 7vw, 64px);
+      line-height:1.05;
+      margin-bottom:16px;
+      letter-spacing:-1px;
+      text-shadow:0 0 24px rgba(249,168,212,0.18);
+    }
+
+    .hero p{
+      width:min(760px, 100%);
+      margin:0 auto;
+      color:var(--muted);
+      line-height:1.85;
+      font-size:16px;
+    }
+
+    .hero-love{
+      margin:18px auto 0;
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--line);
+      color:#ffe4ef;
+      box-shadow:var(--shadow);
+    }
+
+    .intro-card{
+      margin-top:30px;
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:22px;
+      align-items:stretch;
+    }
+
+    .glass{
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+    }
+
+    .intro-text{
+      padding:28px;
+      line-height:1.95;
+      color:rgba(255,245,250,0.96);
+      font-size:16px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(135deg, rgba(255,192,203,0.30), rgba(255,105,180,0.18)),
+        rgba(255,255,255,0.08);
+      border:1px solid rgba(255,192,203,0.35);
+      box-shadow:0 18px 40px rgba(255,105,180,0.18);
+    }
+
+    .intro-text strong{
+      color:#ffd6e7;
+    }
+
+    .intro-typing{
+      min-height:240px;
+      white-space:pre-line;
+    }
+
+    .typing-cursor{
+      display:inline-block;
+      width:10px;
+      margin-left:4px;
+      color:#ffd6e7;
+      animation: blink 0.8s infinite;
+      font-weight:700;
+    }
+
+    @keyframes blink{
+      0%, 49%{ opacity:1; }
+      50%, 100%{ opacity:0; }
+    }
+
+    .sparkle{
+      display:inline-block;
+      margin-left:4px;
+      animation:sparkleFade 0.8s ease-in-out infinite;
+    }
+
+    @keyframes sparkleFade{
+      0%{
+        opacity:0.2;
+        transform:translateY(0) scale(0.8);
+        filter:drop-shadow(0 0 0 rgba(255,255,255,0));
+      }
+      50%{
+        opacity:1;
+        transform:translateY(-1px) scale(1.15);
+        filter:drop-shadow(0 0 8px rgba(255,220,240,0.9));
+      }
+      100%{
+        opacity:0.35;
+        transform:translateY(0) scale(0.9);
+        filter:drop-shadow(0 0 0 rgba(255,255,255,0));
+      }
+    }
+
+    .intro-text::after{
+      content:"💗 💕 💖";
+      position:absolute;
+      right:18px;
+      bottom:14px;
+      font-size:18px;
+      opacity:0.85;
+      animation:floatHeart 4.5s ease-in-out infinite;
+    }
+
+    @keyframes floatHeart{
+      0%,100%{
+        transform:translateY(0);
+      }
+      50%{
+        transform:translateY(-8px);
+      }
+    }
+
+    .intro-visual{
+      min-height:280px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(35,12,26,0.16), rgba(35,12,26,0.40)),
+        url("https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+    }
+
+    .intro-visual::after{
+      content:"♡  ♫  ♡";
+      position:absolute;
+      right:20px;
+      bottom:18px;
+      font-size:28px;
+      color:rgba(255,240,246,0.88);
+      letter-spacing:10px;
+    }
+
+    .topic-grid{
+      margin-top:28px;
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:22px;
+    }
+
+    .topic-card{
+      position:relative;
+      overflow:hidden;
+      min-height:250px;
+      padding:28px;
+      cursor:pointer;
+      transition:.28s ease;
+    }
+
+    .topic-card:hover{
+      transform:translateY(-5px);
+      border-color:rgba(255,255,255,0.24);
+      box-shadow:0 22px 42px rgba(0,0,0,0.34);
+    }
+
+    .topic-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.96;
+    }
+
+    .topic-card.sad::before{
+      background:
+        linear-gradient(180deg, rgba(34,14,26,.16), rgba(34,14,26,.54)),
+        linear-gradient(135deg, rgba(196,181,253,.22), rgba(249,168,212,.18));
+    }
+
+    .topic-card.happy::before{
+      background:
+        linear-gradient(180deg, rgba(40,12,24,.14), rgba(40,12,24,.48)),
+        linear-gradient(135deg, rgba(251,113,133,.20), rgba(253,224,71,.14));
+    }
+
+    .topic-inner{
+      position:relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .topic-title{
+      font-size:30px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .topic-desc{
+      color:rgba(255,245,250,0.84);
+      line-height:1.75;
+      max-width:400px;
+    }
+
+    .topic-btn{
+      margin-top:20px;
+      align-self:flex-start;
+      border:none;
+      padding:12px 18px;
+      border-radius:999px;
+      background:#fff1f7;
+      color:#4b1026;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .section-head{
+      padding:34px 0 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .section-head h2{
+      font-size:34px;
+    }
+
+    .section-head p{
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .back-btn{
+      border:none;
+      padding:12px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.10);
+      color:#fff;
+      border:1px solid var(--line);
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .back-btn:hover{
+      background:rgba(255,255,255,0.14);
+    }
+
+    .song-layout{
+      display:grid;
+      grid-template-columns:0.95fr 1.05fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .song-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .song-item{
+      padding:18px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.07);
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      transition:.25s ease;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+
+    .song-item:hover{
+      transform:translateX(4px);
+      border-color:rgba(255,255,255,0.22);
+    }
+
+    .song-item.active{
+      border-color:rgba(249,168,212,.45);
+      background:rgba(249,168,212,.12);
+      box-shadow:0 16px 34px rgba(0,0,0,0.34);
+    }
+
+    .song-number{
+      width:42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:rgba(255,255,255,0.10);
+      font-weight:800;
+      color:#ffe4ef;
+    }
+
+    .song-info h3{
+      font-size:18px;
+      margin-bottom:6px;
+    }
+
+    .song-info p{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .song-duration{
+      color:#ffe4ef;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .player-card{
+      padding:20px;
+      position:sticky;
+      top:92px;
+    }
+
+    .player-cover{
+      width:100%;
+      aspect-ratio:1/1;
+      border-radius:24px;
+      object-fit:cover;
+      margin-bottom:18px;
+      box-shadow:var(--shadow);
+      background:#111;
+    }
+
+    .player-title{
+      font-size:26px;
+      margin-bottom:8px;
+    }
+
+    .player-sub{
+      color:var(--muted);
+      margin-bottom:16px;
+      line-height:1.7;
+    }
+
+    .player-controls{
+      display:flex;
+      gap:10px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+
+    .control-btn{
+      border:none;
+      padding:12px 18px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .control-main{
+      background:linear-gradient(135deg, #f9a8d4, #fb7185);
+      color:#fff;
+      box-shadow:0 10px 24px rgba(251,113,133,0.24);
+    }
+
+    .control-ghost{
+      background:rgba(255,255,255,0.10);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .progress-wrap{
+      display:grid;
+      grid-template-columns:44px 1fr 44px;
+      gap:10px;
+      align-items:center;
+      margin:14px 0 18px;
+    }
+
+    .progress-time{
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .progress{
+      width:100%;
+      accent-color:#fb7185;
+      cursor:pointer;
+    }
+
+    .lyric-box{
+      margin-top:10px;
+      padding:16px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--line);
+      color:rgba(255,245,250,0.90);
+      line-height:1.9;
+      max-height:260px;
+      overflow:auto;
+      white-space:pre-line;
+    }
+
+    .lyric-title{
+      font-size:14px;
+      color:#ffd6e7;
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    audio{
+      width:100%;
+      margin-top:10px;
+      border-radius:999px;
+    }
+
+    @media (max-width: 900px){
+      .intro-card,
+      .song-layout{
+        grid-template-columns:1fr;
+      }
+
+      .player-card{
+        position:static;
+      }
+    }
+
+    @media (max-width: 700px){
+      .topic-grid{
+        grid-template-columns:1fr;
+      }
+
+      .topbar{
+        border-radius:22px;
+        padding:14px;
+      }
+
+      .section-head h2{
+        font-size:28px;
+      }
+
+      .song-item{
+        grid-template-columns:auto 1fr;
+      }
+
+      .song-duration{
+        grid-column:2;
+      }
+
+      .intro-typing{
+        min-height:auto;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <div class="topbar glass">
+      <div class="brand">Box Cover - Hát cho Linh nghe</div>
+      <div class="mini-note">một góc nhỏ chỉ dành cho Linh 💖</div>
+    </div>
 
-<div class="container">
-  <h1>💖 COMING SOON 💖</h1>
+    <section id="homeScreen" class="screen active">
+      <div class="hero">
+        <h1>Box Cover - Hát cho Linh nghe</h1>
+        <p>
+          Đây không phải một web âm nhạc lớn lao gì cả, chỉ là một chiếc hộp nhỏ để cất những bản cover,
+          những bài hát anh muốn hát cho Em nghe vào những ngày vui, những đêm buồn,
+          hay những lúc chỉ cần có một giai điệu nhẹ nhàng ở bên cạnh.
+        </p>
+        <div class="hero-love">Sẽ có những khoảnh khắc nói bằng nhạc sẽ dễ chạm vào tim hơn 💞</div>
+      </div>
 
-  <p>
-    Website đang nâng cấp lên phiên bản <b>Luxury Pro Max</b> 😏<br>
-    Sắp quay lại với trải nghiệm mượt hơn, dễ sử dụng hơn, thêm một số tính năng mới!
-  </p>
+      <div class="intro-card">
+        <div class="glass intro-text">
+          <div class="intro-typing" id="introTyping"></div><span class="typing-cursor">|</span>
+        </div>
+        <div class="glass intro-visual"></div>
+      </div>
 
-  <div id="countdown">Loading...</div>
+      <div class="topic-grid">
+        <div class="topic-card glass sad" onclick="openTopic('sad')">
+          <div class="topic-inner">
+            <div>
+              <div class="topic-title">Nhạc buồn</div>
+              <div class="topic-desc">
+                Những bài dành cho những lúc lòng chậm lại, cần một chút dịu dàng và một người ở bên bằng âm nhạc.
+              </div>
+            </div>
+            <button class="topic-btn">Mở danh sách</button>
+          </div>
+        </div>
 
-  <a href="https://www.tiktok.com" target="_blank" class="btn">
-    Trải nghiệm thú vị 🔥
-  </a>
-</div>
+        <div class="topic-card glass happy" onclick="openTopic('happy')">
+          <div class="topic-inner">
+            <div>
+              <div class="topic-title">Nhạc vui</div>
+              <div class="topic-desc">
+                Những bài nhẹ hơn, tươi hơn, như một cách để giữ lại nụ cười và những khoảnh khắc đáng yêu của Linh.
+              </div>
+            </div>
+            <button class="topic-btn">Mở danh sách</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<script>
-/* countdown */
-const targetDate = new Date();
-targetDate.setHours(targetDate.getHours() + 5);
+    <section id="topicScreen" class="screen">
+      <div class="section-head">
+        <div>
+          <h2 id="topicTitle">Danh sách bài hát</h2>
+          <p id="topicDesc">Chọn một bài và để giai điệu kể tiếp phần còn lại.</p>
+        </div>
+        <button class="back-btn" onclick="goHome()">← Trở về</button>
+      </div>
 
-function updateCountdown() {
-  const now = new Date();
-  const diff = targetDate - now;
+      <div class="song-layout">
+        <div class="song-list" id="songList"></div>
 
-  const h = Math.floor(diff / (1000*60*60));
-  const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-  const s = Math.floor((diff % (1000*60)) / 1000);
+        <div class="player-card glass">
+          <img id="playerCover" class="player-cover" src="https://via.placeholder.com/600x600?text=Cover" alt="cover">
+          <div class="player-title" id="playerTitle">Chưa chọn bài hát</div>
+          <div class="player-sub" id="playerSub">Bấm vào một bài ở danh sách bên trái để phát nhạc.</div>
 
-  document.getElementById("countdown").innerHTML =
-    h + "h " + m + "m " + s + "s";
-}
+          <div class="player-controls">
+            <button class="control-btn control-main" id="playBtn" onclick="togglePlay()">▶ Phát / Tạm dừng</button>
+            <button class="control-btn control-ghost" onclick="prevSong()">⏮ Bài trước</button>
+            <button class="control-btn control-ghost" onclick="nextSong()">⏭ Bài sau</button>
+          </div>
 
-setInterval(updateCountdown, 1000);
+          <div class="progress-wrap">
+            <div class="progress-time" id="currentTime">0:00</div>
+            <input class="progress" id="progressBar" type="range" min="0" max="100" value="0">
+            <div class="progress-time" id="duration">0:00</div>
+          </div>
 
-/* heart */
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.classList.add("heart");
-  heart.innerHTML = "💖";
+          <audio id="audio" controls></audio>
 
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (20 + Math.random()*40) + "px";
-  heart.style.animationDuration = (4 + Math.random()*4) + "s";
+          <div class="lyric-box">
+            <div class="lyric-title">Lyric</div>
+            <div id="lyricContent">Chưa có lyric cho bài này.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-  document.body.appendChild(heart);
+  <script>
+    const introMessage = `<strong>Gửi Em bé của anh,</strong>
 
-  setTimeout(() => heart.remove(), 8000);
-}
+Nếu một ngày nào đó Em thấy mệt, thấy buồn, hay chỉ đơn giản là muốn nghe một thứ gì đó thật gần, thì chiếc web này ở đây để mở ra. Mỗi bài hát trong này không phải để khoe, cũng không phải để cho tất cả mọi người nghe, mà là để dành cho Em — như một cách rất vụng về nhưng chân thành, rằng dù vui hay buồn, anh vẫn muốn hát cho em nghe. Nếu lời nói có lúc ngập ngừng, thì mong mấy giai điệu này sẽ thay anh ở cạnh em thêm một chút.
+`;
 
-setInterval(createHeart, 200);
-</script>
+    const introTyping = document.getElementById("introTyping");
+    let introIndex = 0;
 
+    function typeIntro() {
+      if (introIndex < introMessage.length) {
+        const currentText = introMessage.slice(0, introIndex + 1);
+        introTyping.innerHTML = currentText + '<span class="sparkle">✨</span>';
+        introIndex++;
+        setTimeout(typeIntro, 48);
+      } else {
+        introTyping.innerHTML = introMessage;
+      }
+    }
+
+    typeIntro();
+
+    const musicData = {
+  sad: {
+    title: "Nhạc buồn",
+    desc: "Những bài hát dành cho những lúc Em cần một chút dịu dàng để lòng nhẹ lại.",
+    songs: [
+      {
+        title: "Mảnh Tình Sai Đôi",
+        duration: "0:00",
+        file: "audio/nhac-buon/manh-tinh-sai-doi.mp3",
+        cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
+        subtitle: "Một bản cover buồn nhưng nhiều cảm xúc.",
+        lyric: ``
+      },
+      {
+        title: "Lo Người Ướt Áo",
+        duration: "0:00",
+        file: "audio/nhac-buon/lo-nguoi-uot-ao.mp3",
+        cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81",
+        subtitle: "Nhẹ nhàng, đủ để nghe trong một buổi tối yên tĩnh.",
+        lyric: ``
+      },
+
+      {
+        title: "Xin Lỗi Vì Đã Xuất Hiện",
+        duration: "0:00",
+        file: "audio/nhac-buon/xin-loi-vi-da-xuat-hien.mp3",
+        cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81",
+        subtitle: "nhiều bài buồn thế nhò",
+        lyric: ``
+      },
+      {
+        title: "Phim Ba Người",
+        duration: "0:00",
+        file: "audio/nhac-buon/phim-ba-nguoi.mp3",
+        cover: "https://images.unsplash.com/photo-1501612780327-45045538702b",
+        subtitle: "Cuộc tình tay 3.",
+        lyric: ``
+      },
+      {
+        title: "Nhìn Về Phía Em",
+        duration: "0:00",
+        file: "audio/nhac-buon/nhin-ve-phia-em.mp3",
+        cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81",
+        subtitle: "Một ánh nhìn ....",
+        lyric: ``
+      },
+      {
+        title: "Người Tình Duyên Trời",
+        duration: "0:00",
+        file: "audio/nhac-buon/nguoi-tinh-duyen-troi.mp3",
+        cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
+        subtitle: "Trong mv cũng hay.",
+        lyric: ``
+      },
+      {
+        title: "Đừng Quên Tên Anh",
+        duration: "0:00",
+        file: "audio/nhac-buon/dung-quen-ten-anh.mp3",
+        cover: "https://images.unsplash.com/photo-1501612780327-45045538702b",
+        subtitle: "Đừng quên tên anh nha.",
+        lyric: ``
+      },
+      {
+        title: "Đừng Khóc Một Mình Em Ơi",
+        duration: "0:00",
+        file: "audio/nhac-buon/dung-khoc-mot-minh-em-oi.mp3",
+        cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81",
+        subtitle: "Nếu buồn, cứ để anh hát.",
+        lyric: ``
+      },
+      {
+        title: "Cần Không Có, Có Không Cần",
+        duration: "0:00",
+        file: "audio/nhac-buon/can-khong-co-co-khong-can.mp3",
+        cover: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
+        subtitle: "Nghe xong sẽ thấy lòng lặng đi.",
+        lyric: ``
+      }
+    ]
+  },
+
+  happy: {
+    title: "Nhạc vui",
+    desc: "Những bài tươi hơn một chút, như để giữ nụ cười của Linh ở lại lâu hơn.",
+    songs: [
+      {
+        title: "Có Được Không Em",
+        duration: "0:00",
+        file: "audio/nhac-vui/co-duoc-khong-em.mp3",
+        cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
+        subtitle: "Một bản cover nhẹ nhàng và dễ thương.",
+        lyric: ``
+      },
+      {
+        title: "Anh",
+        duration: "0:00",
+        file: "audio/nhac-vui/anh.mp3",
+        cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d",
+        subtitle: "Một bài đơn giản nhưng ấm.",
+        lyric: ``
+      },
+      {
+        title: "Anh Nhớ Ra",
+        duration: "0:00",
+        file: "audio/nhac-vui/anh-nho-ra.mp3",
+        cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d",
+        subtitle: "Một chút vui, một chút nhớ.",
+        lyric: ``
+      },
+      {
+        title: "Dù Cho Tận Thế",
+        duration: "0:00",
+        file: "audio/nhac-vui/du-cho-tan-the.mp3",
+        cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
+        subtitle: "Vẫn muốn ở bên Linh.",
+        lyric: ``
+      },
+      {
+        title: "Em Của Anh Đừng Của Ai",
+        duration: "0:00",
+        file: "audio/nhac-vui/em-cua-anh-dung-cua-ai.mp3",
+        cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
+        subtitle: "Nghe là biết dành cho ai rồi.",
+        lyric: ``
+      },
+      {
+        title: "Nắng Dưới Chân Mây",
+        duration: "0:00",
+        file: "audio/nhac-vui/nang-duoi-chan-may.mp3",
+        cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d",
+        subtitle: "Nhẹ nhàng như một ngày đẹp trời.",
+        lyric: ``
+      },
+      {
+        title: "Nơi Này Có Anh",
+        duration: "0:00",
+        file: "audio/nhac-vui/noi-nay-co-anh.mp3",
+        cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
+        subtitle: "Một câu trả lời rõ ràng nhất.",
+        lyric: ``
+          }
+        ]
+      }
+    };
+
+    const homeScreen = document.getElementById("homeScreen");
+    const topicScreen = document.getElementById("topicScreen");
+    const topicTitle = document.getElementById("topicTitle");
+    const topicDesc = document.getElementById("topicDesc");
+    const songList = document.getElementById("songList");
+
+    const playerCover = document.getElementById("playerCover");
+    const playerTitle = document.getElementById("playerTitle");
+    const playerSub = document.getElementById("playerSub");
+    const lyricContent = document.getElementById("lyricContent");
+    const audio = document.getElementById("audio");
+    const progressBar = document.getElementById("progressBar");
+    const currentTimeEl = document.getElementById("currentTime");
+    const durationEl = document.getElementById("duration");
+
+    let currentTopic = "sad";
+    let currentSongIndex = 0;
+    let isLoaded = false;
+
+    function formatTime(time) {
+      if (isNaN(time)) return "0:00";
+      const m = Math.floor(time / 60);
+      const s = Math.floor(time % 60).toString().padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function showScreen(screenName) {
+      homeScreen.classList.remove("active");
+      topicScreen.classList.remove("active");
+
+      if (screenName === "home") homeScreen.classList.add("active");
+      if (screenName === "topic") topicScreen.classList.add("active");
+    }
+
+    function goHome() {
+      audio.pause();
+      showScreen("home");
+    }
+
+    function openTopic(topicKey) {
+      currentTopic = topicKey;
+      currentSongIndex = 0;
+
+      const topic = musicData[topicKey];
+      topicTitle.textContent = topic.title;
+      topicDesc.textContent = topic.desc;
+
+      renderSongList();
+      loadSong(0, false);
+      showScreen("topic");
+    }
+
+    function renderSongList() {
+      const songs = musicData[currentTopic].songs;
+
+      songList.innerHTML = songs.map((song, index) => `
+        <div class="song-item ${index === currentSongIndex ? 'active' : ''}" onclick="playSong(${index})">
+          <div class="song-number">${index + 1}</div>
+          <div class="song-info">
+            <h3>${song.title}</h3>
+            <p>${song.subtitle}</p>
+          </div>
+          <div class="song-duration">${song.duration}</div>
+        </div>
+      `).join("");
+    }
+
+    function loadSong(index, autoPlay = false) {
+      const songs = musicData[currentTopic].songs;
+      const song = songs[index];
+      if (!song) return;
+
+      currentSongIndex = index;
+      playerCover.src = song.cover;
+      playerTitle.textContent = song.title;
+      playerSub.textContent = song.subtitle;
+      lyricContent.textContent = song.lyric || "Chưa có lyric cho bài này.";
+      audio.src = song.file;
+      durationEl.textContent = song.duration || "0:00";
+      currentTimeEl.textContent = "0:00";
+      progressBar.value = 0;
+      isLoaded = true;
+
+      renderSongList();
+
+      if (autoPlay) {
+        audio.play();
+      }
+    }
+
+    function playSong(index) {
+      loadSong(index, true);
+    }
+
+    function togglePlay() {
+      if (!isLoaded) {
+        loadSong(currentSongIndex, true);
+        return;
+      }
+
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    function prevSong() {
+      const songs = musicData[currentTopic].songs;
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      playSong(currentSongIndex);
+    }
+
+    function nextSong() {
+      const songs = musicData[currentTopic].songs;
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      playSong(currentSongIndex);
+    }
+
+    audio.addEventListener("timeupdate", () => {
+      if (!audio.duration) return;
+      progressBar.value = (audio.currentTime / audio.duration) * 100;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    progressBar.addEventListener("input", () => {
+      if (!audio.duration) return;
+      audio.currentTime = (progressBar.value / 100) * audio.duration;
+    });
+
+    audio.addEventListener("ended", () => {
+      nextSong();
+    });
+  </script>
 </body>
 </html>
